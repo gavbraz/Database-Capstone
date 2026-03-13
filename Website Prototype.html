@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterans Records Search | Allegheny County</title>
+    <style>
+        /* Allegheny County style templates*/
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0056b3;
+            --light-gray: #f4f4f4;
+            --border-gray: #ccc;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        /* Header Style */
+        .header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 20px 10%;
+            border-bottom: 4px solid #eeb111; /* Gold accent often used in county branding */
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 10px;
+        }
+
+        /* Search Section */
+        .search-box {
+            background: var(--light-gray);
+            padding: 25px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+
+        .search-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Filters Layout */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            background: white;
+            padding: 15px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+
+        /* Action Button */
+        .btn-search {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .btn-search:hover {
+            background-color: var(--secondary-blue);
+        }
+
+        /* Results Area */
+        #results-container {
+            margin-top: 40px;
+        }
+
+        .result-card {
+            border: 1px solid var(--border-gray);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary-blue);
+            background: #fff;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .data-point {
+            font-size: 14px;
+        }
+
+        .label-text {
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 11px;
+            display: block;
+        }
+
+        .value-text {
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div style="font-size: 1.5em; font-weight: bold;">Allegheny County, PA</div>
+    <div>Veterans Services</div>
+</div>
+
+<div class="container">
+    <h1>Veterans Records Searcher</h1>
+    <p>Search the county database for veteran burial and service records.</p>
+
+    <div class="search-box">
+        <div class="search-group">
+            <label for="vetName">Search by Veteran Name</label>
+            <input type="text" id="vetName" placeholder="Enter first or last name...">
+        </div>
+
+        <div class="search-group">
+            <label>Filter by War / Era of Service</label>
+            <div class="filter-grid">
+                <label class="checkbox-item"><input type="checkbox" name="war" value="WWII"> World War II</label>
+                <label class="checkbox-item"><input type="checkbox" name="war" value="Korea"> Korea</label>
+                <label class="checkbox-item"><input type="checkbox" name="war" value="Vietnam"> Vietnam</label>
+                <label class="checkbox-item"><input type="checkbox" name="war" value="Gulf"> Gulf War</label>
+                <label class="checkbox-item"><input type="checkbox" name="war" value="Gwot"> GWOT (Iraq/Afghan)</label>
+                <label class="checkbox-item"><input type="checkbox" name="war" value="Peace"> Peacetime</label>
+            </div>
+        </div>
+
+        <button class="btn-search" onclick="performSearch()">Finalize Search</button>
+    </div>
+
+    <div id="results-container" class="hidden">
+        <h2 id="result-count">Search Results</h2>
+        <div id="results-list">
+            </div>
+    </div>
+</div>
+
+
+/* Will not use hte the script embedded in html, will instead migrate to react javascript file for integration with DHS and better rendering. */
+<script>
+    function performSearch() {
+        const resultsContainer = document.getElementById('results-container');
+        const resultsList = document.getElementById('results-list');
+        const searchVal = document.getElementById('vetName').value;
+
+        // Mock Data
+        const mockData = [
+            {
+                name: "John A. Smith",
+                war: "World War II",
+                dob: "05/12/1921",
+                dod: "11/02/1998",
+                branch: "Army",
+                location: "Allegheny Cemetery, Section 4"
+            },
+            {
+                name: "Robert M. Davis",
+                war: "Vietnam",
+                dob: "08/22/1945",
+                dod: "03/15/2010",
+                branch: "Marine Corps",
+                location: "National Cemetery of the Alleghenies"
+            }
+        ];
+
+        // Clear previous
+        resultsList.innerHTML = '';
+        resultsContainer.classList.remove('hidden');
+
+        // Logic to simulate results
+        if(searchVal.trim() === "") {
+            resultsList.innerHTML = "<p>Please enter a name to see the prototype functionality.</p>";
+            return;
+        }
+
+        mockData.forEach(record => {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+                <div class="result-grid">
+                    <div class="data-point"><span class="label-text">Name</span><span class="value-text">${record.name}</span></div>
+                    <div class="data-point"><span class="label-text">War Involved</span><span class="value-text">${record.war}</span></div>
+                    <div class="data-point"><span class="label-text">Branch of Service</span><span class="value-text">${record.branch}</span></div>
+                    <div class="data-point"><span class="label-text">Date of Birth</span><span class="value-text">${record.dob}</span></div>
+                    <div class="data-point"><span class="label-text">Date of Death</span><span class="value-text">${record.dod}</span></div>
+                    <div class="data-point" style="grid-column: span 2;"><span class="label-text">Burial Location</span><span class="value-text">${record.location}</span></div>
+                </div>
+            `;
+            resultsList.appendChild(card);
+        });
+    }
+</script>
+
+</body>
+</html>
