@@ -1,0 +1,407 @@
+/* Allegheny County Veterans Services- copied and emulated shared stylesheet */
+
+:root {
+    --primary-blue:   #003366;
+    --secondary-blue: #0056b3;
+    --light-gray:     #f4f4f4;
+    --border-gray:    #ccc;
+    --text-dark:      #333;
+    --gold:           #eeb111;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.header {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 18px 10%;
+    border-bottom: 4px solid var(--gold);
+}
+
+.header-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.header-sub {
+    font-size: 0.9em;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.container {
+    max-width: 960px;
+    margin: 36px auto;
+    padding: 0 24px;
+    flex: 1;
+}
+
+.page-title {
+    color: var(--primary-blue);
+    font-size: 1.6em;
+    margin-bottom: 4px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.page-desc {
+    color: #555;
+    margin-top: 6px;
+    margin-bottom: 24px;
+    font-size: 0.95em;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    color: var(--secondary-blue);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover { text-decoration: underline; }
+
+/* ── Search box ──────────────────────────────────────────────────────────── */
+.search-box {
+    background: white;
+    padding: 28px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    margin-bottom: 30px;
+}
+
+.search-box--compact { padding: 20px 24px; }
+
+.search-group { margin-bottom: 22px; }
+.search-group:last-child { margin-bottom: 0; }
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.search-group--inline { flex: 1; margin-bottom: 0; }
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border-gray);
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--secondary-blue);
+    box-shadow: 0 0 0 2px rgba(0,86,179,0.15);
+}
+
+/* ── War filter chips ────────────────────────────────────────────────────── */
+.filter-section-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.filter-hint {
+    font-weight: 400;
+    color: #888;
+    font-size: 13px;
+}
+
+.filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.war-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--border-gray);
+    border-radius: 20px;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 400;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.war-chip input[type="checkbox"] {
+    accent-color: var(--primary-blue);
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.war-chip:has(input:checked) {
+    background: #e8eef7;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.btn-search {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 11px 32px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-search:hover { background-color: var(--secondary-blue); }
+
+.btn-clear {
+    background: none;
+    color: #666;
+    border: 1px solid var(--border-gray);
+    padding: 11px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.15s;
+}
+
+.btn-clear:hover { background: var(--light-gray); }
+
+.btn-back {
+    display: inline-block;
+    margin-top: 24px;
+    color: var(--secondary-blue);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-back:hover { text-decoration: underline; }
+
+/* ── Results header ──────────────────────────────────────────────────────── */
+.results-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.results-header h2 {
+    color: var(--primary-blue);
+    font-size: 1.15em;
+    margin: 0;
+}
+
+.result-count-badge {
+    background: var(--primary-blue);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+/* ── Result cards ────────────────────────────────────────────────────────── */
+.result-card {
+    border: 1px solid #ddd;
+    border-left: 5px solid var(--primary-blue);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    background: white;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.15s;
+}
+
+.result-card--link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.result-card--link:hover {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    border-left-color: var(--secondary-blue);
+}
+
+.card-name {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 12px;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 20px;
+}
+
+.result-grid--sm {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ── Data points ─────────────────────────────────────────────────────────── */
+.label-text {
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.value-text {
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.war-badge {
+    display: inline-block;
+    background: #e8eef7;
+    color: var(--primary-blue);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    border: 1px solid #c3d3ea;
+}
+
+.war-badge--lg {
+    font-size: 13px;
+    padding: 4px 14px;
+    margin-bottom: 18px;
+    display: inline-block;
+}
+
+/* ── Detail page ─────────────────────────────────────────────────────────── */
+.detail-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.detail-name {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.detail-section {
+    background: var(--light-gray);
+    border-radius: 4px;
+    padding: 18px 20px;
+}
+
+.detail-section--full { grid-column: span 2; }
+
+.detail-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.detail-row {
+    margin-bottom: 14px;
+}
+
+.detail-row:last-child { margin-bottom: 0; }
+
+/* ── No results ──────────────────────────────────────────────────────────── */
+.no-results {
+    text-align: center;
+    padding: 50px 20px;
+    color: #777;
+}
+
+.no-results-icon {
+    font-size: 2.5em;
+    margin-bottom: 12px;
+}
+
+.no-results h3 { margin: 0 0 6px; color: #555; }
+.no-results p  { margin: 0; font-size: 0.9em; }
+.no-results a  { color: var(--secondary-blue); }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    padding: 24px 20px;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .result-grid,
+    .result-grid--sm { grid-template-columns: 1fr 1fr; }
+    .detail-grid     { grid-template-columns: 1fr; }
+    .detail-section--full { grid-column: span 1; }
+    .search-row      { flex-direction: column; align-items: stretch; }
+    .header          { padding: 16px 5%; }
+}

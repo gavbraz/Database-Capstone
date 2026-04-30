@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterans Records Search | Allegheny County</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="header-title">Allegheny County, PA</div>
+    <div class="header-sub">Department of Veterans Services</div>
+</div>
+
+<div class="container">
+
+    <!-- ── Search view ─────────────────────────────────────────────────── -->
+    <div id="view-search">
+        <h1 class="page-title">Veterans Records Search</h1>
+        <p class="page-desc">Search the county database for veteran burial and service records. Enter a name and optionally filter by era of service.</p>
+
+        <div class="search-box">
+            <div class="search-group">
+                <label for="q">Veteran Name</label>
+                <input type="text" id="q" placeholder="Enter first or last name..." autocomplete="off">
+            </div>
+
+            <div class="search-group">
+                <span class="filter-section-label">
+                    Filter by Era of Service
+                    <span class="filter-hint">(leave unchecked to show all)</span>
+                </span>
+                <div class="filter-grid" id="war-chips">
+                    <label class="war-chip"><input type="checkbox" name="war" value="Civil"> Civil</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="WW1"> WW1</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="WW2"> WW2</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="Korea"> Korea</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="Vietnam"> Vietnam</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="GWOT"> GWOT</label>
+                    <label class="war-chip"><input type="checkbox" name="war" value="None"> None</label>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-search" onclick="runSearch()">Search</button>
+                <button class="btn-clear" onclick="clearSearch()">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Results view ────────────────────────────────────────────────── -->
+    <div id="view-results" class="hidden">
+        <div class="results-header">
+            <h2 id="results-title">Results</h2>
+            <span class="result-count-badge" id="result-count"></span>
+        </div>
+        <div id="results-list"></div>
+        <button class="btn-back" onclick="showSearch()">&larr; New Search</button>
+    </div>
+
+    <!-- ── Detail view ─────────────────────────────────────────────────── -->
+    <div id="view-detail" class="hidden">
+        <div class="breadcrumb">
+            <a href="#" onclick="showResults(); return false;">Search Results</a> &rsaquo; Record Detail
+        </div>
+        <div class="detail-card">
+            <div class="detail-name" id="d-name"></div>
+            <span class="war-badge war-badge--lg" id="d-war"></span>
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Service Information</h3>
+                    <div class="detail-row">
+                        <span class="label-text">Era of Service</span>
+                        <span class="value-text" id="d-war2"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label-text">Branch of Service</span>
+                        <span class="value-text" id="d-branch"></span>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Vital Records</h3>
+                    <div class="detail-row">
+                        <span class="label-text">Date of Birth</span>
+                        <span class="value-text" id="d-dob"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label-text">Date of Death</span>
+                        <span class="value-text" id="d-dod"></span>
+                    </div>
+                </div>
+                <div class="detail-section detail-section--full">
+                    <h3 class="detail-section-title">Burial Information</h3>
+                    <div class="detail-row">
+                        <span class="label-text">Burial Location</span>
+                        <span class="value-text" id="d-burial"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-back" onclick="showResults()">&larr; Back to Results</button>
+    </div>
+
+</div>
+
+<div class="footer">
+    Allegheny County Veterans Services &mdash; Data shown is for official county records use only.
+</div>
+
+<script>
+    const views = {
+        search:  document.getElementById('view-search'),
+        results: document.getElementById('view-results'),
+        detail:  document.getElementById('view-detail'),
+    };
+
+    function showOnly(name) {
+        Object.entries(views).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+    }
+
+    function showSearch()  { showOnly('search'); }
+    function showResults() { showOnly('results'); }
+    function showDetail()  { showOnly('detail'); }
+
+    // Enter key triggers search from the name field
+    document.getElementById('q').addEventListener('keydown', e => {
+        if (e.key === 'Enter') runSearch();
+    });
+
+    function clearSearch() {
+        document.getElementById('q').value = '';
+        document.querySelectorAll('input[name="war"]').forEach(cb => cb.checked = false);
+        document.getElementById('results-list').innerHTML = '';
+        showOnly('search');
+    }
+
+    async function runSearch() {
+        const q    = document.getElementById('q').value.trim();
+        const wars = [...document.querySelectorAll('input[name="war"]:checked')]
+                         .map(cb => cb.value);
+
+        const params = new URLSearchParams();
+        if (q) params.append('q', q);
+        wars.forEach(w => params.append('war', w));
+
+        let rows;
+        try {
+            const res = await fetch(`/api/search?${params}`);
+            rows = await res.json();
+            if (!Array.isArray(rows)) throw new Error(rows.error || 'Unknown error');
+        } catch (err) {
+            alert('Search failed: ' + err.message);
+            return;
+        }
+
+        const title = q ? `Results for "${q}"` : 'All Records';
+        document.getElementById('results-title').textContent = title;
+        document.getElementById('result-count').textContent =
+            rows.length + (rows.length === 1 ? ' record' : ' records');
+
+        const list = document.getElementById('results-list');
+        list.innerHTML = '';
+
+        if (rows.length === 0) {
+            list.innerHTML = `
+                <div class="no-results">
+                    <div class="no-results-icon">&#128269;</div>
+                    <h3>No records found</h3>
+                    <p>Try a different name or adjust the era filters.</p>
+                </div>`;
+        } else {
+            rows.forEach(r => {
+                const card = document.createElement('a');
+                card.href = '#';
+                card.className = 'result-card result-card--link';
+                card.onclick = (e) => { e.preventDefault(); loadDetail(r.id); };
+                card.innerHTML = `
+                    <div class="card-name">${esc(r.name)}</div>
+                    <div class="result-grid result-grid--sm">
+                        <div class="data-point">
+                            <span class="label-text">Era of Service</span>
+                            <span class="war-badge">${esc(r.war || '—')}</span>
+                        </div>
+                        <div class="data-point">
+                            <span class="label-text">Branch</span>
+                            <span class="value-text">${esc(r.branch_of_service || '—')}</span>
+                        </div>
+                        <div class="data-point">
+                            <span class="label-text">Date of Death</span>
+                            <span class="value-text">${esc(r.date_of_death || '—')}</span>
+                        </div>
+                        <div class="data-point" style="grid-column: span 2;">
+                            <span class="label-text">Burial Location</span>
+                            <span class="value-text">${esc(r.burial_location || '—')}</span>
+                        </div>
+                    </div>`;
+                list.appendChild(card);
+            });
+        }
+
+        showOnly('results');
+    }
+
+    async function loadDetail(id) {
+        let r;
+        try {
+            const res = await fetch(`/api/veteran/${id}`);
+            r = await res.json();
+            if (r.error) throw new Error(r.error);
+        } catch (err) {
+            alert('Failed to load record: ' + err.message);
+            return;
+        }
+
+        document.getElementById('d-name').textContent   = r.name;
+        document.getElementById('d-war').textContent    = r.war || '—';
+        document.getElementById('d-war2').textContent   = r.war || '—';
+        document.getElementById('d-branch').textContent = r.branch_of_service || '—';
+        document.getElementById('d-dob').textContent    = r.date_of_birth || '—';
+        document.getElementById('d-dod').textContent    = r.date_of_death || '—';
+        document.getElementById('d-burial').textContent = r.burial_location || '—';
+
+        showOnly('detail');
+    }
+
+    function esc(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+</script>
+
+</body>
+</html>
