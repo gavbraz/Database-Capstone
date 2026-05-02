@@ -133,7 +133,15 @@ STEPS
 Three prototype files were developed before the final implementation:
 
   PROTOTYPE KYLE- DHSDatabase.py
-
+    This program is a prototype data ingestion pipeline that transforms raw, 
+    Excel-based (Kissflow) burial records into a structured SQLite database. 
+    The program reads and extracts the necessary fields from an Excel file, 
+    cleaning the data to handle inconsistencies (missing values, extra 
+    whitespace, etc.). After processing, the data is inserted into a relational 
+    SQLite database stored in individual tables, and foreign key relationships 
+    are used to link burial records to their associated war/plot entries. 
+    Caching is used to reduce redundant DB lookups and improve overall 
+    performance.
 
   PROTOTYPE VINCENT- DHSDatabase.py
 
