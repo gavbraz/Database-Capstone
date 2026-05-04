@@ -155,6 +155,13 @@ cursor = conn.cursor()
 # Enforces foreign key constraints in SQLite
 cursor.execute("PRAGMA foreign_keys = ON")
 
+cursor.executescript("""
+DELETE FROM burials;
+DELETE FROM plots;
+DELETE FROM wars;
+DELETE FROM cemeteries;
+""")
+
 print("DB Path:", Path(db_path).resolve())
 
 
