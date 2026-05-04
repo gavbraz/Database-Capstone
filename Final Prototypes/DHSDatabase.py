@@ -313,7 +313,8 @@ if __name__ == "__main__":
     else:
         print(f"[WARN] Excel file not found: {XLSX_PATH}")
 
-    # ── PDF ingestion (uncomment when output_cards/ directory is available) ─
+    # ── PDF ingestion (uncomment when needed)
+    
     # pdf_dir = Path(__file__).parent.parent / "output_cards"
     # if pdf_dir.exists():
     #     print(f"\nIngesting PDFs from: {pdf_dir} ...")
